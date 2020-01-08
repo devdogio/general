@@ -259,22 +259,23 @@ namespace Devdog.General.Editors.ReflectionDrawers
             if (fromType.IsGenericType)
             {
                 // Get standard things like string : TODO: Make this dynamic in the future, allowing users to select their own types.
-                implementable = new DerivedTypeInformation()
-                {
-                    types = new Type[]
-                    {
-                        fromType.MakeGenericType(typeof (string)),
-                        fromType.MakeGenericType(typeof (bool)),
-                        fromType.MakeGenericType(typeof (int)),
-                        fromType.MakeGenericType(typeof (float)),
-                        fromType.MakeGenericType(typeof (uint)),
-                        fromType.MakeGenericType(typeof (Vector2)),
-                        fromType.MakeGenericType(typeof (Vector3)),
-                        fromType.MakeGenericType(typeof (Vector4)),
-                        fromType.MakeGenericType(typeof (Quaternion)),
-                        fromType.MakeGenericType(typeof (UnityEngine.Object)),
-                    }
-                };
+                implementable = new DerivedTypeInformation();
+                //{
+                //    types = new Type[10]
+                //    {
+                //        fromType.MakeGenericType(typeof(string)),
+                //        fromType.MakeGenericType(typeof(bool)),
+                //        fromType.MakeGenericType(typeof(int)),
+                //        fromType.MakeGenericType(typeof(float)),
+                //        fromType.MakeGenericType(typeof(uint)),
+                //        fromType.MakeGenericType(typeof(Vector2)),
+                //        fromType.MakeGenericType(typeof(Vector3)),
+                //        fromType.MakeGenericType(typeof(Vector4)),
+                //        fromType.MakeGenericType(typeof(Quaternion)),
+                //        fromType.MakeGenericType(typeof(UnityEngine.Object)),
+                //    }
+                //};
+                implementable.types = TryAddTypes(fromType);
 
                 implementable.content = implementable.types.Select(o => new GUIContent(GetGenericTypeNiceName(o))).ToArray();
             }
@@ -285,6 +286,10 @@ namespace Devdog.General.Editors.ReflectionDrawers
             }
 
             return implementable;
+        }
+        static Type[] TryAddTypes(Type fromType)
+        {
+            return fromType.GetGenericArguments();
         }
 
         public static string GetGenericTypeNiceName(Type type)
